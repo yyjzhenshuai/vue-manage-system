@@ -21,6 +21,15 @@ const routes: RouteRecordRaw[] = [
                 },
                 component: () => import(/* webpackChunkName: "dashboard" */ '../views/dashboard.vue'),
             },
+            {
+                path: '/invoiceList',
+                name: 'invoiceList',
+                meta: {
+                    title: '订单列表',
+                    permiss: '1',
+                },
+                component: () => import( '../views/orderList/invoiceList.vue'),
+            },
             // {
             //     path: '/table',
             //     name: 'basetable',

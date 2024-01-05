@@ -3,34 +3,45 @@
         <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="sidebar.collapse" background-color="#324157"
             text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened router>
             <template v-for="item in items">
-                <template v-if="item.subs">
-                    <el-sub-menu :index="item.index" :key="item.index" v-permiss="item.permiss">
+                <template v-if="item.children">
+                    <el-sub-menu :index="item.path" :key="item.path">
                         <template #title>
                             <el-icon>
                                 <component :is="item.icon"></component>
                             </el-icon>
-                            <span>{{ item.title }}</span>
+                            <span>{{ item.authName }}</span>
                         </template>
-                        <template v-for="subItem in item.subs">
-                            <el-sub-menu v-if="subItem.subs" :index="subItem.index" :key="subItem.index"
-                                v-permiss="item.permiss">
-                                <template #title>{{ subItem.title }}</template>
-                                <el-menu-item v-for="(threeItem, i) in subItem.subs" :key="i" :index="threeItem.index">
-                                    {{ threeItem.title }}
-                                </el-menu-item>
+                        <template v-for="subItem in item.children">
+                            <el-sub-menu v-if="subItem.children && subItem.children.length > 0" :index="subItem.path"
+                                :key="subItem.path">
+                                <template #title>{{ subItem.authName }}</template>
+                                <template v-for="threeItem in subItem.children">
+                                    <el-sub-menu v-if="threeItem.children.length && threeItem.children.length > 0"
+                                        :index="threeItem.path" :key="threeItem.path">
+                                        <template #title>{{ threeItem.authName }}</template>
+                                        <template v-for="fourItem in threeItem.children">
+                                            <el-menu-item :index="fourItem.path">
+                                                {{ fourItem.authName }}
+                                            </el-menu-item>
+                                        </template>
+                                    </el-sub-menu>
+                                    <el-menu-item v-else :index="threeItem.path">
+                                        {{ threeItem.authName }}
+                                    </el-menu-item>
+                                </template>
                             </el-sub-menu>
-                            <el-menu-item v-else :index="subItem.index" v-permiss="item.permiss">
-                                {{ subItem.title }}
+                            <el-menu-item v-else :index="subItem.path">
+                                {{ subItem.authName }}
                             </el-menu-item>
                         </template>
                     </el-sub-menu>
                 </template>
                 <template v-else>
-                    <el-menu-item :index="item.index" :key="item.index" v-permiss="item.permiss">
+                    <el-menu-item :index="item.path" :key="item.path">
                         <el-icon>
-                            <component :is="item.icon"></component>
+                            <component :is="item.path"></component>
                         </el-icon>
-                        <template #title>{{ item.title }}</template>
+                        <template #title>{{ item.authName }}</template>
                     </el-menu-item>
                 </template>
             </template>
@@ -44,12 +55,28 @@ import { useSidebarStore } from '../store/sidebar';
 import { useRoute } from 'vue-router';
 
 const items = [
+    // {
+    //     icon: 'Odometer',
+    //     path: '/dashboard',
+    //     authName: '系统首页',
+    //     permiss: '1',
+    // },
     {
         icon: 'Odometer',
-        index: '/dashboard',
-        title: '系统首页',
+        path: '1',
+        authName: '自由行产品管理',
         permiss: '1',
+        children: [
+            {
+                icon: 'invoiceList',
+                path: '/invoiceList',
+                authName: '订单列表',
+                permiss: '1',
+                children: []
+            },
+        ]
     },
+
     // {
     //     icon: 'Calendar',
     //     index: '1',
@@ -157,7 +184,7 @@ const sidebar = useSidebarStore();
 }
 
 .sidebar-el-menu:not(.el-menu--collapse) {
-    width: 250px;
+    width: 200px;
 }
 
 .sidebar>ul {

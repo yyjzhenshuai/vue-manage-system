@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-row :gutter="20">
+		<!-- <el-row :gutter="20">
 			<el-col :span="8">
 				<el-card shadow="hover" class="mgb20" style="height: 252px">
 					<div class="user-info">
@@ -100,8 +100,8 @@
 					</el-table>
 				</el-card>
 			</el-col>
-		</el-row>
-		<el-row :gutter="20">
+		</el-row> -->
+		<!-- <el-row :gutter="20">
 			<el-col :span="12">
 				<el-card shadow="hover">
 					<schart ref="bar" class="schart" canvasId="bar" :options="options"></schart>
@@ -112,7 +112,7 @@
 					<schart ref="line" class="schart" canvasId="line" :options="options2"></schart>
 				</el-card>
 			</el-col>
-		</el-row>
+		</el-row> -->
 	</div>
 </template>
 
