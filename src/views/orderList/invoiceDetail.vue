@@ -6,8 +6,10 @@
 					<el-button @click="goBack">返回</el-button>
 				</el-col>
 				<el-col :span="9">
+					<el-button type="warning" class="mt-2" @click.prevent="addDomain()">添加航线</el-button>
+
 					<el-button type="primary" v-if="state.formData.id && state.formData.status == 1"
-						@click="submitForm(false)">保存</el-button>
+						@click="submitForm(formRef)">保存</el-button>
 					<el-button type="primary" v-if="state.formData.id && state.formData.status == 1"
 						@click="deleteOrder">删除</el-button>
 					<el-button type="primary" v-if="!state.formData.id" @click="clickSub">提交</el-button>
@@ -18,7 +20,53 @@
 		<div>
 			<el-tabs v-model="state.selectTabs" type="border-card" @tab-click="handleClick">
 				<el-tab-pane label="订单详情" name="form">
-					<el-form ref="formData" label-width="auto" :rules="state.rules" :model="state.formData"
+					<el-form ref="formRef" :model="dynamicValidateForm" label-width="120px" class="demo-dynamic">
+						<el-row v-for="(domain, index) in dynamicValidateForm.domains" :key="domain.key">
+							<el-col :span="6">
+								<el-form-item label="出发城市" prop="deptAir" :rules="{
+									required: true,
+									message: 'domain can not be null',
+									trigger: 'blur',
+								}">
+									<el-input v-model="domain.deptAir" />
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="到达城市" prop="desnAir">
+									<el-input v-model="domain.desnAir" />
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="出发日期" prop="depDate">
+									<el-input v-model="domain.depDate" />
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item>
+									<el-button type="danger" class="mt-2"
+										@click.prevent="removeDomain(domain)">删除</el-button>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-form-item prop="pepNum" label="团队人数" :rules="[
+							{
+								required: true,
+								message: '人数不能为空',
+								trigger: 'blur',
+							},
+						]">
+							<el-input v-model="dynamicValidateForm.remark" />
+						</el-form-item>
+						<el-form-item label="备注" prop="remark" :rules="[]">
+							<el-input v-model="dynamicValidateForm.remark" autosize type="textarea" />
+						</el-form-item>
+						<el-form-item>
+							<el-button type="primary" @click="submitForm(formRef)">Submit</el-button>
+							<el-button @click="addDomain">New domain</el-button>
+							<el-button @click="resetForm(formRef)">Reset</el-button>
+						</el-form-item>
+					</el-form>
+					<!-- <el-form ref="formData" label-width="auto" :rules="state.rules" :model="state.formData"
 						class="demo-form-inline">
 						<el-row :gutter="20">
 							<el-col v-if="state.formData.id" :span="8">
@@ -69,8 +117,8 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
-								<el-form-item label="联系邮箱" prop="custEmail">
-									<el-input v-model="state.formData.custEmail" :disabled="state.disabled"
+								<el-form-item label="联系邮箱" prop="custremark">
+									<el-input v-model="state.formData.custremark" :disabled="state.disabled"
 										placeholder="" />
 								</el-form-item>
 							</el-col>
@@ -82,7 +130,7 @@
 								</el-form-item>
 							</el-col>
 						</el-row>
-					</el-form>
+					</el-form> -->
 				</el-tab-pane>
 				<el-tab-pane name="fpInfo" label="订单信息">
 					<el-descriptions title="" :border="true">
@@ -106,6 +154,7 @@ import type { TabsPaneContext } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { formatTimestamp } from '@/utils/common';
+import type { FormInstance } from 'element-plus'
 import regex from '@/utils/regex';
 
 const route = useRoute()
@@ -154,7 +203,7 @@ const state = reactive({
 			{ required: true, message: '销货单号不能为空', trigger: 'change' },
 			{ min: 15, max: 15, message: '请输入正确的销货单号', trigger: 'change' },
 		],
-		custEmail: [
+		custremark: [
 			{ required: true, message: '收票邮箱不能为空', trigger: 'change' },
 			{ pattern: regex.email, message: '收票邮箱格式不正确', trigger: 'change' },
 		],
@@ -204,9 +253,6 @@ const fpDownload = () => {
 const fpSendMail = () => {
 
 }
-const submitForm = async (isSubmit: any) => {
-
-};
 
 const deleteOrder = () => {
 	// 二次确认删除
@@ -252,6 +298,68 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 	}
 }
 
+
+const formRef = ref<FormInstance>()
+const dynamicValidateForm = reactive<{
+	domains: DomainItem[]
+	remark: string
+	pepNum: string
+
+}>({
+	domains: [
+		{
+			deptAir: '',
+			desnAir: '',
+			depDate: '',
+			key: Date.now(),
+			value: '',
+		},
+	],
+	remark: '',
+	pepNum: ''
+})
+
+interface DomainItem {
+	key: number
+	deptAir: string,
+	desnAir: string,
+	depDate: string,
+	value: string
+}
+
+const removeDomain = (item: DomainItem) => {
+	const index = dynamicValidateForm.domains.indexOf(item)
+	if (index !== -1) {
+		dynamicValidateForm.domains.splice(index, 1)
+	}
+}
+
+const addDomain = () => {
+	dynamicValidateForm.domains.push({
+		key: Date.now(),
+		deptAir: '',
+		desnAir: '',
+		depDate: '',
+		value: '',
+	})
+}
+
+const submitForm = (formEl: FormInstance | undefined) => {
+	if (!formEl) return
+	formEl.validate((valid) => {
+		if (valid) {
+			console.log('submit!')
+		} else {
+			console.log('error submit!')
+			return false
+		}
+	})
+}
+
+const resetForm = (formEl: FormInstance | undefined) => {
+	if (!formEl) return
+	formEl.resetFields()
+}
 </script>
 
 <style scoped>
