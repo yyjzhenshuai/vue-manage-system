@@ -11,12 +11,15 @@
 					</el-input>
 				</el-form-item>
 				<el-form-item prop="password">
-					<el-input
-						type="password"
-						placeholder="password"
-						v-model="param.password"
-						@keyup.enter="submitForm(login)"
-					>
+					<el-input type="password" placeholder="password" v-model="param.password"
+						@keyup.enter="submitForm(login)">
+						<template #prepend>
+							<el-button :icon="Lock"></el-button>
+						</template>
+					</el-input>
+				</el-form-item>
+				<el-form-item prop="repetPassword" v-if="!isRegister">
+					<el-input type="password" placeholder="重复密码" v-model="param.password" @keyup.enter="submitForm(login)">
 						<template #prepend>
 							<el-button :icon="Lock"></el-button>
 						</template>
@@ -25,9 +28,15 @@
 				<div class="login-btn">
 					<el-button type="primary" @click="submitForm(login)">登录</el-button>
 				</div>
-				<p class="login-tips">Tips : 用户名和密码随便填。</p>
+				<div class="login-tips" style="display: flex;justify-content: space-between;color: blue;">
+					<span style="cursor: pointer;">忘记密码</span>
+					<span style="cursor: pointer; " v-show="isRegister" @click="isRegister = false">注册账号</span>
+					<span style="cursor: pointer;" v-show="!isRegister" @click="isRegister = true">已有账号登录</span>
+				</div>
+				<!-- <p class="login-tips">Tips : 用户名和密码随便填。</p> -->
 			</el-form>
 		</div>
+
 	</div>
 </template>
 
@@ -63,6 +72,7 @@ const rules: FormRules = {
 };
 const permiss = usePermissStore();
 const login = ref<FormInstance>();
+const isLogin = ref(false)
 const submitForm = (formEl: FormInstance | undefined) => {
 	if (!formEl) return;
 	formEl.validate((valid: boolean) => {
@@ -82,6 +92,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
 
 const tags = useTagsStore();
 tags.clearTags();
+const isRegister = ref(false)
+
 </script>
 
 <style scoped>
@@ -92,6 +104,7 @@ tags.clearTags();
 	background-image: url(../assets/img/login-bg.jpg);
 	background-size: 100%;
 }
+
 .ms-title {
 	width: 100%;
 	line-height: 50px;
@@ -100,6 +113,7 @@ tags.clearTags();
 	color: #fff;
 	border-bottom: 1px solid #ddd;
 }
+
 .ms-login {
 	position: absolute;
 	left: 50%;
@@ -110,17 +124,21 @@ tags.clearTags();
 	background: rgba(255, 255, 255, 0.3);
 	overflow: hidden;
 }
+
 .ms-content {
 	padding: 30px 30px;
 }
+
 .login-btn {
 	text-align: center;
 }
+
 .login-btn button {
 	width: 100%;
 	height: 36px;
 	margin-bottom: 10px;
 }
+
 .login-tips {
 	font-size: 12px;
 	line-height: 30px;

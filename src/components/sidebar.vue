@@ -74,6 +74,57 @@ const items = [
                 permiss: '1',
                 children: []
             },
+            {
+                icon: 'invoiceDetail',
+                path: '/invoiceDetail',
+                authName: '单团创建',
+                permiss: '1',
+                children: []
+            }, {
+                icon: 'seriesDetail',
+                path: '/seriesDetail',
+                authName: '系列团创建',
+                permiss: '1',
+                children: []
+            },
+        ]
+    },
+    {
+        icon: 'Odometer',
+        path: '2',
+        authName: '策略管理',
+        permiss: '1',
+        children: [
+            {
+                icon: 'tacticsList',
+                path: '/tacticsList',
+                authName: '策略列表',
+                permiss: '1',
+                children: []
+            },
+            {
+                icon: 'tacticsDetail',
+                path: '/tacticsDetail',
+                authName: '添加策略',
+                permiss: '1',
+                children: []
+            },
+        ]
+    },
+    {
+        icon: 'Odometer',
+        path: '3',
+        authName: '信息管理',
+        permiss: '1',
+        children: [
+            {
+                icon: 'companyMeg',
+                path: '/companyMeg',
+                authName: '公司信息管理',
+                permiss: '1',
+                children: []
+            },
+
         ]
     },
 

@@ -5,27 +5,8 @@
                 <el-form :inline="true" label-width="auto" :model="query" class="demo-form-inline">
                     <el-row>
                         <el-col :span="8">
-                            <el-form-item label="订单申请单">
-                                <el-input v-model="query.fapiaoNo" placeholder="订单申请单" class="" />
-                            </el-form-item>
-                        </el-col>
-
-                        <el-col :span="8">
-                            <el-form-item label="抬头">
-                                <el-input v-model="query.custName" placeholder="抬头" class="" />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="税号">
-                                <el-input v-model="query.custTaxid" placeholder="税号" class="" />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="订单状态">
-                                <el-select v-model="query.status" placeholder="订单状态" class=" status">
-                                    <el-option v-for="(item, ind) in common.fpOrderTypes" :key="ind" :label="item.label"
-                                        :value="item.value"></el-option>
-                                </el-select>
+                            <el-form-item label="策略编号">
+                                <el-input v-model="query.fapiaoNo" placeholder="策略编号" class="" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -37,16 +18,14 @@
                 </el-row>
             </div>
             <div style="padding: 10px; ">
-                <h2 style="margin: 20px 0;">订单申请列表</h2>
+                <h2 style="margin: 20px 0;">策略列表</h2>
                 <el-divider />
             </div>
             <el-table :data="invoice.invoiceList" class="table" ref="multipleTable" header-cell-class-name="table-header">
                 <el-table-column show-overflow-tooltip prop="id" label="id" align="center"></el-table-column>
-                <el-table-column prop="fapiaoNo" label="订单申请单号" width="200"></el-table-column>
-
-                <el-table-column prop="amount" label="订单金额"></el-table-column>
-                <el-table-column prop="fpTitle" label="订单注释"></el-table-column>
-                <el-table-column prop="status" label="订单状态">
+                <el-table-column prop="fapiaoNo" label="策略编号" width="200"></el-table-column>
+                <el-table-column prop="fpTitle" label="策略注释"></el-table-column>
+                <el-table-column prop="status" label="策略状态">
                     <template #default="scope">{{ common.getFpOrderType(scope.row.status) }}</template>
                 </el-table-column>
                 <el-table-column prop="nickName" label="创建者"></el-table-column>
@@ -524,16 +503,10 @@ let form = reactive({
 let idx: number = -1;
 const handleDetail = (index: number, row: any) => {
     idx = index;
-    if (index % 2 == 0) {
-        router.push({ name: 'seriesDetail', query: { id: row.id } });
-
-    } else {
-        router.push({ name: 'invoiceDetail', query: { id: row.id } });
-
-    }
+    router.push({ name: 'tacticsDetail', query: { id: row.id } });
 };
 const applyBtn = () => {
-    router.push({ name: 'invoiceDetail', query: { id: '' } });
+    router.push({ name: 'tacticsDetail', query: { id: '' } });
 };
 watch(() => route.query.id, // 监听id参数的变化
     (newId, oldId) => {

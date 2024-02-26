@@ -16,7 +16,7 @@
 					</el-table-column>
 				</el-table>
 				<div class="handle-row">
-					<el-button type="primary">全部标为已读</el-button>
+					<el-button type="primary" @click="allRead()">全部标为已读</el-button>
 				</div>
 			</el-tab-pane>
 			<el-tab-pane :label="`已读消息(${state.read.length})`" name="second">
@@ -35,7 +35,7 @@
 						</el-table-column>
 					</el-table>
 					<div class="handle-row">
-						<el-button type="danger">删除全部</el-button>
+						<el-button type="danger" @click="delAll()">删除全部</el-button>
 					</div>
 				</template>
 			</el-tab-pane>
@@ -55,7 +55,7 @@
 						</el-table-column>
 					</el-table>
 					<div class="handle-row">
-						<el-button type="danger">清空回收站</el-button>
+						<el-button type="danger" @click="clearAll()">清空回收站</el-button>
 					</div>
 				</template>
 			</el-tab-pane>
@@ -70,24 +70,24 @@ const message = ref('first');
 const state = reactive({
 	unread: [
 		{
-			date: '2018-04-19 20:00:00',
-			title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护'
+			date: '2024-02-19 20:00:00',
+			title: '【系统通知】该系统将于今晚18点到凌晨9点进行升级维护'
 		},
 		{
-			date: '2018-04-19 21:00:00',
-			title: '今晚12点整发大红包，先到先得'
+			date: '2024-02-19 21:00:00',
+			title: '有新的订单更新需要查看'
 		}
 	],
 	read: [
 		{
-			date: '2018-04-19 20:00:00',
-			title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护'
+			date: '2024-02-19 20:00:00',
+			title: '有新的待处理订单'
 		}
 	],
 	recycle: [
 		{
-			date: '2018-04-19 20:00:00',
-			title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护'
+			date: '2024-02-19 20:00:00',
+			title: '订单*********已通过'
 		}
 	]
 });
@@ -96,20 +96,35 @@ const handleRead = (index: number) => {
 	const item = state.unread.splice(index, 1);
 	state.read = item.concat(state.read);
 };
+const allRead = () => {
+	state.read = state.unread.concat(state.read);
+	state.unread = []
+};
+
 const handleDel = (index: number) => {
 	const item = state.read.splice(index, 1);
 	state.recycle = item.concat(state.recycle);
 };
+const delAll = () => {
+	state.recycle = state.read.concat(state.recycle);
+	state.read = []
+};
+
 const handleRestore = (index: number) => {
 	const item = state.recycle.splice(index, 1);
 	state.read = item.concat(state.read);
 };
+const clearAll = () => {
+	state.recycle = []
+};
+
 </script>
 
 <style>
 .message-title {
 	cursor: pointer;
 }
+
 .handle-row {
 	margin-top: 30px;
 }

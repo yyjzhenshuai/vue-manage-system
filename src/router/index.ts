@@ -25,10 +25,73 @@ const routes: RouteRecordRaw[] = [
                 path: '/invoiceList',
                 name: 'invoiceList',
                 meta: {
+                    title: '新增系列团',
+                    permiss: '1',
+                },
+                component: () => import( '@/views/orderList/invoiceList.vue'),
+            },
+            {
+                path: '/invoiceList',
+                name: 'invoiceList',
+                meta: {
+                    title: '新增单团',
+                    permiss: '1',
+                },
+                component: () => import( '@/views/orderList/invoiceList.vue'),
+            },
+            {
+                path: '/invoiceList',
+                name: 'invoiceList',
+                meta: {
                     title: '订单列表',
                     permiss: '1',
                 },
-                component: () => import( '../views/orderList/invoiceList.vue'),
+                component: () => import( '@/views/orderList/invoiceList.vue'),
+            },
+            {
+                path: '/tacticsList',
+                name: 'tacticsList',
+                meta: {
+                    title: '策略列表',
+                    permiss: '1',
+                },
+                component: () => import( '@/views/tactics/tacticsList.vue'),
+            },
+            {
+                path: '/tacticsDetail/:id?',
+                name: 'tacticsDetail',
+                meta: {
+                    title: '添加策略',
+                    permiss: '1',
+                },
+                component: () => import( '@/views/tactics/tacticsDetail.vue'),
+            },
+            {
+                path: '/invoiceDetail/:id?',
+                name: 'invoiceDetail',
+                meta: {
+                    title: '单团创建',
+                    permiss: '1',
+                },
+                component: () => import( '@/views/orderList/invoiceDetail.vue'),
+            },
+            {
+                path: '/seriesDetail/:id?',
+                name: 'seriesDetail',
+                meta: {
+                    title: '系列团创建',
+                    permiss: '1',
+                },
+                component: () => import( '@/views/orderList/invoiceDetail.vue'),
+            },
+            {
+                path: '/companyMeg',
+                name: 'companyMeg',
+                meta: {
+                    title: '公司信息管理',
+                    permiss: '1',
+                },
+                component: () => import( '@/views/companyMeg.vue'),
             },
             // {
             //     path: '/table',
@@ -57,15 +120,15 @@ const routes: RouteRecordRaw[] = [
             //     },
             //     component: () => import(/* webpackChunkName: "form" */ '../views/form.vue'),
             // },
-            // {
-            //     path: '/tabs',
-            //     name: 'tabs',
-            //     meta: {
-            //         title: 'tab标签',
-            //         permiss: '3',
-            //     },
-            //     component: () => import(/* webpackChunkName: "tabs" */ '../views/tabs.vue'),
-            // },
+            {
+                path: '/tabs',
+                name: 'tabs',
+                meta: {
+                    title: 'tab标签',
+                    permiss: '3',
+                },
+                component: () => import(/* webpackChunkName: "tabs" */ '../views/tabs.vue'),
+            },
            
             // {
             //     path: '/permission',
